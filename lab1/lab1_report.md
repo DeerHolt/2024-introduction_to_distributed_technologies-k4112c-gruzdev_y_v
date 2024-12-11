@@ -27,7 +27,7 @@ metadata:
     app: vault                         
 spec:                                                
   containers:
-    - image: vault:1.13.3 
+    - image: vault:latest
       name: vault                             
       ports:
       - name: vault-port
