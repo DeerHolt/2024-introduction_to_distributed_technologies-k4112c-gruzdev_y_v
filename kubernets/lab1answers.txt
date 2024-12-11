@@ -1,0 +1,90 @@
+commands used:
+minikube start
+kubectl apply -f vault-pod.yaml
+minikube kubectl -- expose pod vault --type=NodePort --port=8200
+minikube kubectl -- port-forward service/vault 8200:8200
+ token found in kubectl logs vault
+ "
+ $ kubectl logs vault
+Couldn't start vault with IPC_LOCK. Disabling IPC_LOCK, please use --cap-add IPC_LOCK
+==> Vault server configuration:
+
+Administrative Namespace: 
+             Api Address: http://0.0.0.0:8200
+                     Cgo: disabled
+         Cluster Address: https://0.0.0.0:8201
+   Environment Variables: HOME, HOSTNAME, KUBERNETES_PORT, KUBERNETES_PORT_443_TCP, KUBERNETES_PORT_443_TCP_ADDR, KUBERNETES_PORT_443_TCP_PORT, KUBERNETES_PORT_443_TCP_PROTO, KUBERNETES_SERVICE_HOST, KUBERNETES_SERVICE_PORT, KUBERNETES_SERVICE_PORT_HTTPS, NAME, PATH, PWD, SHLVL, VERSION
+              Go Version: go1.22.8
+              Listener 1: tcp (addr: "0.0.0.0:8200", cluster address: "0.0.0.0:8201", disable_request_limiter: "false", max_request_duration: "1m30s", max_request_size: "33554432", tls: "disabled")
+               Log Level: 
+                   Mlock: supported: true, enabled: false
+           Recovery Mode: false
+                 Storage: inmem
+                 Version: Vault v1.18.2, built 2024-11-20T11:24:56Z
+             Version Sha: e36bac59ddb8e10e8912c0ddb44416c850939855
+
+2024-12-11T18:38:11.165Z [INFO]  proxy environment: http_proxy="" https_proxy="" no_proxy=""
+==> Vault server started! Log data will stream in below:
+2024-12-11T18:38:11.165Z [INFO]  incrementing seal generation: generation=1
+
+2024-12-11T18:38:11.165Z [WARN]  no `api_addr` value specified in config or in VAULT_API_ADDR; falling back to detection if possible, but this value should be manually set
+2024-12-11T18:38:11.166Z [INFO]  core: Initializing version history cache for core
+2024-12-11T18:38:11.166Z [INFO]  events: Starting event system
+2024-12-11T18:38:11.166Z [INFO]  core: security barrier not initialized
+2024-12-11T18:38:11.166Z [INFO]  core: security barrier initialized: stored=1 shares=1 threshold=1
+2024-12-11T18:38:11.167Z [INFO]  core: post-unseal setup starting
+2024-12-11T18:38:11.181Z [INFO]  core: loaded wrapping token key
+2024-12-11T18:38:11.181Z [INFO]  core: successfully setup plugin runtime catalog
+2024-12-11T18:38:11.181Z [INFO]  core: successfully setup plugin catalog: plugin-directory=""
+2024-12-11T18:38:11.181Z [INFO]  core: no mounts; adding default mount table
+2024-12-11T18:38:11.183Z [INFO]  core: successfully mounted: type=cubbyhole version="v1.18.2+builtin.vault" path=cubbyhole/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.183Z [INFO]  core: successfully mounted: type=system version="v1.18.2+builtin.vault" path=sys/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.184Z [INFO]  core: successfully mounted: type=identity version="v1.18.2+builtin.vault" path=identity/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.186Z [INFO]  core: successfully mounted: type=token version="v1.18.2+builtin.vault" path=token/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.186Z [INFO]  rollback: Starting the rollback manager with 256 workers
+2024-12-11T18:38:11.186Z [INFO]  rollback: starting rollback manager
+2024-12-11T18:38:11.186Z [INFO]  core: restoring leases
+2024-12-11T18:38:11.187Z [INFO]  expiration: lease restore complete
+2024-12-11T18:38:11.187Z [INFO]  identity: entities restored
+2024-12-11T18:38:11.187Z [INFO]  identity: groups restored
+2024-12-11T18:38:11.187Z [INFO]  core: Recorded vault version: vault version=1.18.2 upgrade time="2024-12-11 18:38:11.187864178 +0000 UTC" build date=2024-11-20T11:24:56Z
+2024-12-11T18:38:11.188Z [INFO]  core: post-unseal setup complete
+2024-12-11T18:38:11.188Z [INFO]  core: root token generated
+2024-12-11T18:38:11.188Z [INFO]  core: pre-seal teardown starting
+2024-12-11T18:38:11.188Z [INFO]  rollback: stopping rollback manager
+2024-12-11T18:38:11.189Z [INFO]  core: pre-seal teardown complete
+2024-12-11T18:38:11.189Z [INFO]  core.cluster-listener.tcp: starting listener: listener_address=0.0.0.0:8201
+2024-12-11T18:38:11.189Z [INFO]  core.cluster-listener: serving cluster requests: cluster_listen_address=[::]:8201
+2024-12-11T18:38:11.189Z [INFO]  core: post-unseal setup starting
+2024-12-11T18:38:11.189Z [INFO]  core: loaded wrapping token key
+2024-12-11T18:38:11.189Z [INFO]  core: successfully setup plugin runtime catalog
+2024-12-11T18:38:11.189Z [INFO]  core: successfully setup plugin catalog: plugin-directory=""
+2024-12-11T18:38:11.190Z [INFO]  core: successfully mounted: type=system version="v1.18.2+builtin.vault" path=sys/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.190Z [INFO]  core: successfully mounted: type=identity version="v1.18.2+builtin.vault" path=identity/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.190Z [INFO]  core: successfully mounted: type=cubbyhole version="v1.18.2+builtin.vault" path=cubbyhole/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.191Z [INFO]  core: successfully mounted: type=token version="v1.18.2+builtin.vault" path=token/ namespace="ID: root. Path: "
+2024-12-11T18:38:11.192Z [INFO]  rollback: Starting the rollback manager with 256 workers
+2024-12-11T18:38:11.192Z [INFO]  core: restoring leases
+2024-12-11T18:38:11.192Z [INFO]  rollback: starting rollback manager
+2024-12-11T18:38:11.193Z [INFO]  identity: entities restored
+2024-12-11T18:38:11.193Z [INFO]  identity: groups restored
+2024-12-11T18:38:11.193Z [INFO]  expiration: lease restore complete
+2024-12-11T18:38:11.194Z [INFO]  core: post-unseal setup complete
+2024-12-11T18:38:11.194Z [INFO]  core: vault is unsealed
+2024-12-11T18:38:11.202Z [INFO]  core: successful mount: namespace="" path=secret/ type=kv version="v0.20.0+builtin"
+WARNING! dev mode is enabled! In this mode, Vault runs entirely in-memory
+and starts unsealed with a single unseal key. The root token is already
+authenticated to the CLI, so you can immediately begin using Vault.
+
+You may need to set the following environment variables:
+
+    $ export VAULT_ADDR='http://0.0.0.0:8200'
+
+The unseal key and root token are displayed below in case you want to
+seal/unseal the Vault or re-authenticate.
+
+Unseal Key: aLCLowMGv5******
+Root Token: hvs.bmk8q******
+
+Development mode should NOT be used in production installations!
+"
