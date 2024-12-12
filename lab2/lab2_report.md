@@ -65,46 +65,51 @@ spec:
     $ kubectl apply -f service.yaml
 
 #### Перенаправление запросов на pod'ы
-    $ minikube kubectl -- port-forward service/itdt-frontend-service 8080:80
+    $ minikube kubectl -- port-forward service/itdt-frontend-service 3010:3010
+
+### results
+![first enter](images/image1.png)
 
 #### logs
 Вывод всех подов:
 
-$ kubectl get pods
-NAME                             READY   STATUS    RESTARTS   AGE
-itdt-frontend-6869ffc847-q9qjt   1/1     Running   0          21m
-itdt-frontend-6869ffc847-smrlw   1/1     Running   0          21m
+$ minikube kubectl -- get pods
+NAME                               READY   STATUS    RESTARTS   AGE
+itdt-deployment-78f6b5cc7b-7mxfp   1/1     Running   0          9m58s
+itdt-deployment-78f6b5cc7b-tvjrz   1/1     Running   0          9m58s
+
 
 $ kubectl get service itdt-frontend-service
 NAME                    TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 itdt-frontend-service   NodePort   10.98.237.68   <none>        80:30007/TCP   13m
 
 
-Вывод логов пода deployment-react-7cccbb6dc5-55xjx:
+Вывод логов пода itdt-deployment-78f6b5cc7b-tvjrz:
     
-    $ minikube kubectl -- logs deployment-react-7cccbb6dc5-55xjx
-    Builing frontend
-    Browserslist: caniuse-lite is outdated. Please run:
-        npx update-browserslist-db@latest
-        Why you should do it regularly: https://github.com/browserslist/update-db#readme
-    Browserslist: caniuse-lite is outdated. Please run:
-        npx update-browserslist-db@latest
-        Why you should do it regularly: https://github.com/browserslist/update-db#readme
-    build finished
-    Server started on port 3000
+$ minikube kubectl -- logs itdt-deployment-78f6b5cc7b-tvjrz
+Builing frontend
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+build finished
+Server started on port 3000
 
-Вывод логов пода deployment-react-7cccbb6dc5-5qx7x:
+Вывод логов пода itdt-deployment-78f6b5cc7b-7mxfp:
 
-    $ minikube kubectl -- logs deployment-react-7cccbb6dc5-5qx7x
-    Builing frontend
-    Browserslist: caniuse-lite is outdated. Please run:
-        npx update-browserslist-db@latest
-        Why you should do it regularly: https://github.com/browserslist/update-db#readme
-    Browserslist: caniuse-lite is outdated. Please run:
-        npx update-browserslist-db@latest
-        Why you should do it regularly: https://github.com/browserslist/update-db#readme
-    build finished
-    Server started on port 3000
+$ minikube kubectl -- logs itdt-deployment-78f6b5cc7b-7mxfp
+Builing frontend
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+build finished
+Server started on port 3000
+
 
 
 ### Схема

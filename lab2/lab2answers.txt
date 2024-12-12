@@ -1,3 +1,8 @@
 commands used:
 
-
+  $ minikube start
+  $ kubectl apply -f deployment.yaml
+  $ minikube kubectl -- port-forward service/itdt-frontend-service 3010:3010
+  $ minikube kubectl -- logs itdt-deployment-78f6b5cc7b-tvjrz
+  $ kubectl get service itdt-frontend-service
+  $ minikube kubectl -- logs itdt-deployment-78f6b5cc7b-7mxfp
