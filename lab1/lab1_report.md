@@ -33,6 +33,14 @@ spec:
       - name: vault-port
         containerPort: 8200
 ```
+#### Vault
+![Vault log in](images/image1.png)
+
+### scheme
+![Scheme](images/diagram.png)
+
+The rest of the images are in folder images/
+
 ## Contents
 - manifest/vault-pod.yaml: manifest for deploying vault pod
 - answers.txt: FAQ
