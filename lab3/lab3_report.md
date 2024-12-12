@@ -156,7 +156,7 @@ $ minikube tunnel
 ![2](images/image2.png)
 
 ## Схема:
-![3](images/image3.drawio.png)
+![3](images/image3.png)
 
 ## Сommands used:
 minikube tunnel
