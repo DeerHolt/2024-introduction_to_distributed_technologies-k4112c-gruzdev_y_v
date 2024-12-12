@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: ReplicaSet                                            
+metadata:
+  name: front-repset                   
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: itdt-frontend
+  template:
+    metadata:
+      labels:
+        app: itdt-frontend
+    spec:                                      
+      containers:
+        - image: ifilyaninitmo/itdt-contained-frontend:master
+          name: itdt-frontend                           
+          ports:
+          - name: react-port
+            containerPort: 3000
+          env:
+            - name: REACT_APP_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: react_app_username
+            - name: REACT_APP_COMPANY_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: react_app_company_name

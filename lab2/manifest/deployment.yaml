@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: itdt-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: itdt-frontend
+  template:
+    metadata:
+      labels:
+        app: itdt-frontend
+    spec:                                      
+      containers:
+        - image: ifilyaninitmo/itdt-contained-frontend:master
+          name: itdt-frontend                          
+          ports:
+          - name: frontend-port
+            containerPort: 3000
+          env:
+            - name: REACT_APP_USERNAME
+              value: 'DeerHolt'
+            - name: REACT_APP_COMPANY_NAME
+              value: 'Robonomics'

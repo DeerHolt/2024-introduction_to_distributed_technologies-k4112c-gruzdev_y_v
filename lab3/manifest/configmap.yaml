@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  react_app_username: "DeerHolt"
+  react_app_company_name: "Robonomics"

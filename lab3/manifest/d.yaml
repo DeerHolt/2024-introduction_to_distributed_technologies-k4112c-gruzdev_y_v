@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  react_app_username: "DeerHolt"
+  react_app_company_name: "Robonomics"
+
+
+---
+
+apiVersion: apps/v1
+kind: ReplicaSet                                            
+metadata:
+  name: front-repset                   
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: itdt-frontend
+  template:
+    metadata:
+      labels:
+        app: itdt-frontend
+    spec:                                      
+      containers:
+        - image: ifilyaninitmo/itdt-contained-frontend:master
+          name: itdt-frontend                           
+          ports:
+          - name: react-port
+            containerPort: 3000
+          env:
+            - name: REACT_APP_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: react_app_username
+            - name: REACT_APP_COMPANY_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: react_app_company_name
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-service
+spec:
+  selector:
+    app: itdt-frontend
+  type: ClusterIP
+  ports:
+    - port: 3010
+      name: react-port
+      targetPort: 3000
+      protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: react-tls
+type: kubernetes.io/tls
+data:
+  tls.crt: MIIDNzCCAh+gAwIBAgIUMtj8zBpIl5l7mnsVLNFyzQADWXwwDQYJKoZIhvcNAQELBQAwKzEUMBIGA1UEAwwLZGVlcmhvbHQubWUxEzARBgNVBAoMClJvYm9ub21pY3MwHhcNMjQxMjEyMDQxNzEwWhcNMjUxMjEyMDQxNzEwWjArMRQwEgYDVQQDDAtkZWVyaG9sdC5tZTETMBEGA1UECgwKUm9ib25vbWljczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMRE9ZM7sIgowDdJ/qQdtzzz2IHk8q/f6gaEiREL8NnbvZTb9SCxGfmBZXR+BjD2hAE3kHCD1MrU9W7xO7KR5ei+1RbEn6lWjKha2fJ1keNB/GOwSSyqZ6IW67KJAooO0F8LAE6o2TrvhiiRUL0raeqb+1VlPT345iOJeOv3wlrNieUw6rr8XNBfXI+kqhqKbc0S3eJ7lXwvoo1vhIMFgcwxPPooU8LTMKqZda7i8Dn1C8wKipUint4cwtLJX3egc/NTtRorZtjObQ/GBWml8jcZcMwpZRHxd/EXhyoF5Ro82ASyN4HLcnwiWkLbpLtpuqAKSIoUgT1XHCOvLV8MolECAwEAAaNTMFEwHQYDVR0OBBYEFNomvnLXgUR5GTnoXX2Lv2EPCWSyMB8GA1UdIwQYMBaAFNomvnLXgUR5GTnoXX2Lv2EPCWSyMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAFugKOqAWSvd5tGF/BSdV1uNsbE8VbFuxBpEDzTGoCj5gKr5VSjfeVaVc7LX2Fu/vTRSbFAcx84JvfBhr/TzrbCqRGjrd+t6SX412OVA4RJMwEx14szRiRzylrfSGJvljv7oL3CO2gUpKs3U8Ye2y7ByR+VRIxaVMksJY/XVkJB//09eAViy7sEiOxKACa/neaAIWKal/COpNiuYOXEmIxV/eQHk18u4HBUUQG2bWT/VdpdXC5BOf6Es8xf1hF/WlXTe2oGMmGcSAvwNPIQ062YBF+JruzaQrCrdvztsBEkd/0BXCug5q/WDGnQVzp340Vfn4btNyTAgM7iknyElfEU=
+  tls.key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDERPWTO7CIKMA3Sf6kHbc889iB5PKv3+oGhIkRC/DZ272U2/UgsRn5gWV0fgYw9oQBN5Bwg9TK1PVu8TuykeXovtUWxJ+pVoyoWtnydZHjQfxjsEksqmeiFuuyiQKKDtBfCwBOqNk674YokVC9K2nqm/tVZT09+OYjiXjr98JazYnlMOq6/FzQX1yPpKoaim3NEt3ie5V8L6KNb4SDBYHMMTz6KFPC0zCqmXWu4vA59QvMCoqVIp7eHMLSyV93oHPzU7UaK2bYzm0PxgVppfI3GXDMKWUR8XfxF4cqBeUaPNgEsjeBy3J8IlpC26S7abqgCkiKFIE9Vxwjry1fDKJRAgMBAAECggEAUYjaQfdufyn6rB1LsS79E8+zFkcfwItzI5EEhfXhcQe1yrTTsOiRw1KLbKj79nQ6Y20LToqdqENu0E9bvvOYQKeiS0qUj1r6pOfVGcHYwMGFUX6G74y875u4/5qmWOcNjiY6UvMXB0JBB/JSSbvSzNlOwGuF1QxkwseV2eU7ss9svZ8HUEL3Fz2SdWZQ0jXbEjyAREtGIi1kDf5C6dVjyCJRdpt11XPIsNtv1RpuGeL6rOOAnKrkX+bFq7UU7RshsOBemngHD29Mty2KAXPXjrlRU2AK3WO2Co3D9w4ZRRUnTPyoE9mPecOnkEjtdZNMMQA0JEgrXlpyjMjDXJLB7wKBgQDpyVfDQDLTingJT1gVcWU4xHIVMqWwDaL3L+wA03jNC+7jGV06g+rruLTdIYnE71NzbPX6yEJ2S2kV/Y+MtUNX2O54CI8XxTB5/A92PkY9uRyWhp3XCdE10TCrLSRjEcVtzXAiAI9WAoayV0vbhocHY1bCVs6XkOE7+YXKfQWiMwKBgQDW6wtfDGAM9Z1wjQ/vLsOoh33yK35LWJ3r77oDx/6UUyCrNt0tJKhpnEEftH66LjNeWNgwqN8m5+3GeGIrikUWT5GOCgMDKFZz6WbzwLtSlVO2P0UYpCmcNQNjQD0Cevi65YOVl3xPvwr6pKdzbZs+n6ZE+N+HAOyWuu0xIPXNawKBgDLpZfNfR7JJtVpRrRz+VMzH+xAit3Jfhd3O0dZcNzJwJtXN8D+N+tranoiJhTcd5057rBWxBsg8I+ZmEZzS3JeE5mm9c2v5xVTLT5KwfRtz9IXTSwxJVwYhSDf+3K22cQg4dPLyrEROyIaN/DcSVNWHDJ3Fybe4FVS6QiiWkWOBAoGBALaHMUUsUXcwMuKgK2RMJ0g+qqy+W6jKPnVfSHBlrsVyRFCla/snIxFu77BpryeYjXAXrKTHB58XY04od9fauwpT0Z78ycoovCP9mr5ydaWRxWMHITvoUJ6mN5ZXvHkaz5yLyNGHssBX1I9CwCS8dhkdpiz14YHbOxRY9ZHAGIK5AoGALiNsLAo9TLj8FoWHXnHXPfaKiLHdJ72YTUY1dxBSkszbnFE/EC8uZ7tzX3+Wzj4V5xDcKVDXvfXH36Ei66ruowo4acfRQHwotjLrtZjmphvGQw0Xyk3zIsMCjmIaYdgA/x1YjNO6uRhkH8UPJZpnIpRPN83/JhMrQQecX5/tunY=
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-ingress
+spec:
+  tls:
+    - secretName: react-tls
+      hosts:
+        - deerholt.me
+  rules:
+    - host: deerholt.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: react-service
+                port:
+                  number: 3010
