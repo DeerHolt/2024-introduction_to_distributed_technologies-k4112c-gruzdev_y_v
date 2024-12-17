@@ -1,0 +1,21 @@
+commands used:
+
+minikube start --network-plugin=cni --cni=calico --nodes 2 -p multinode-demo
+kubectl config get-contexts
+kubectl get nodes
+kubectl label nodes multinode rack=0
+kubectl label nodes multinode-m03 rack=1
+kubectl get pods -n kube-system
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+kubectl get crds | grep ippools
+kubectl apply -f myippool.yaml
+kubectl get ippool
+kubectl get ippool -o wide
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl port-forward service/service-lab4 3000:3000
+kubectl exec deployment-6b7c4f96b7-rp779 --  nslookup 10.244.117.199
+kubectl exec deployment-6b7c4f96b7-ncl8t --  nslookup 10.244.7.194
+kubectl get pods
+kubectl get pods -o wide
+kubectl exec -it deployment-6b7c4f96b7-ncl8t -- sh
